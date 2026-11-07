@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { HealthModule } from './health/health.module.js';
+import { entities } from './database/entities.js';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { HealthModule } from './health/health.module.js';
         username: config.getOrThrow<string>('DATABASE_USER'),
         password: config.getOrThrow<string>('DATABASE_PASSWORD'),
         database: config.getOrThrow<string>('DATABASE_NAME'),
-        autoLoadEntities: true,
+        entities,
         synchronize: false,
       }),
     }),
