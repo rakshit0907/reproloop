@@ -7,6 +7,7 @@ import { HealthModule } from './health/health.module.js';
 import { entities } from './database/entities.js';
 import { AuthModule } from './auth/auth.module.js';
 import { ProjectsModule } from './projects/projects.module.js';
+import { IncidentsModule } from './incidents/incidents.module.js';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -26,6 +27,7 @@ import { ProjectsModule } from './projects/projects.module.js';
     HealthModule,
     AuthModule,
     ProjectsModule,
+    IncidentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
