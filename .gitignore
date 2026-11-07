@@ -26,3 +26,5 @@ Thumbs.db
 # IDE
 .vscode/*
 !.vscode/extensions.json
+# TypeScript build cache
+*.tsbuildinfo

@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16
+    container_name: reproloop-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: reproloop
+      POSTGRES_PASSWORD: reproloop_dev
+      POSTGRES_DB: reproloop
+    ports:
+      - "5434:5432"
+    volumes:
+      - reproloop-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reproloop -d reproloop"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  reproloop-pgdata:
