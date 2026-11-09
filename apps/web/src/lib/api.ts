@@ -57,3 +57,41 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
 
   return (await response.json()) as T;
 }
+
+export interface ProjectSummary {
+  id: string;
+  name: string;
+  description: string | null;
+}
+
+export interface IncidentSummary {
+  id: string;
+  projectId: string;
+  title: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  severity?: string | null;
+  category?: string | null;
+}
+
+export interface IncidentDetail extends IncidentSummary {
+  description: string;
+  expectedBehavior: string | null;
+  actualBehavior: string | null;
+  reproductionSteps: string | null;
+  reporterId?: string;
+}
+
+export interface Paginated<T> {
+  items: T[];
+  total: number;
+  page: number;
+  limit: number;
+}
+export interface ProjectDetail extends ProjectSummary {
+  repositoryUrl?: string | null;
+  ownerId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
