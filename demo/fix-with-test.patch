@@ -1,0 +1,37 @@
+diff --git a/src/login.js b/src/login.js
+--- a/src/login.js
++++ b/src/login.js
+@@ -5,8 +5,5 @@
+   if (!email || !password) {
+     return { ok: false, error: 'Email and password are required' };
+   }
+-  if (event.defaultPrevented) {
+-    return null;
+-  }
+   return authenticate(email, password);
+ }
+diff --git a/test/login.regression.test.js b/test/login.regression.test.js
+new file mode 100644
+--- /dev/null
++++ b/test/login.regression.test.js
+@@ -0,0 +1,20 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { handleLogin } from '../src/login.js';
++
++test('valid credentials reach authenticate after the form is submitted', () => {
++  let called = null;
++  const event = {
++    defaultPrevented: false,
++    preventDefault() {
++      this.defaultPrevented = true;
++    },
++    target: { email: { value: ' user@example.com ' }, password: { value: 'secret' } },
++  };
++  const result = handleLogin(event, (email, password) => {
++    called = { email, password };
++    return { ok: true };
++  });
++  assert.deepEqual(called, { email: 'user@example.com', password: 'secret' });
++  assert.deepEqual(result, { ok: true });
++});
