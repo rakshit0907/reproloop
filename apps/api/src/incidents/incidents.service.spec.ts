@@ -50,7 +50,11 @@ function makeService() {
     findOne: async ({ where }: { where: { id: string } }) =>
       projects.find((p) => p.id === where.id) ?? null,
   };
-  return new IncidentsService(incidentRepo as never, projectRepo as never);
+  return new IncidentsService(
+    incidentRepo as never,
+    projectRepo as never,
+    { recordReceived: async () => undefined } as never,
+  );
 }
 
 const report = {

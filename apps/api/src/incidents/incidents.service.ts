@@ -6,7 +6,7 @@ import { Project } from '../projects/project.entity.js';
 import type { CreateIncidentDto } from './dto/create-incident.dto.js';
 import type { ListIncidentsQueryDto } from './dto/list-incidents-query.dto.js';
 import { Incident } from './incident.entity.js';
-
+import { IncidentWorkflowService } from './incident-workflow.service.js';
 const isStaff = (user: JwtPayload) =>
   user.role === 'DEVELOPER' || user.role === 'ADMIN';
 
@@ -45,6 +45,7 @@ export class IncidentsService {
     @InjectRepository(Incident)
     private readonly incidents: Repository<Incident>,
     @InjectRepository(Project) private readonly projects: Repository<Project>,
+    private readonly workflow: IncidentWorkflowService,
   ) {}
 
   async create(user: JwtPayload, dto: CreateIncidentDto) {
@@ -65,7 +66,9 @@ export class IncidentsService {
       reproductionSteps: dto.reproductionSteps?.trim() || null,
       status: 'RECEIVED',
     });
-    return toDetail(await this.incidents.save(incident), isStaff(user));
+    const saved = await this.incidents.save(incident);
+    await this.workflow.recordReceived(saved, user);
+    return toDetail(saved, isStaff(user));
   }
 
   async list(user: JwtPayload, query: ListIncidentsQueryDto) {
